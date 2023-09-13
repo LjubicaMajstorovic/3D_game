@@ -1,5 +1,9 @@
 package com.example.demo1;
 
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
@@ -8,6 +12,7 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Box;
+import javafx.util.Duration;
 
 public class Player extends GameObject implements EventHandler<Event> {
     private static final double DEFAULT_POSTION_X = 0;
@@ -22,6 +27,8 @@ public class Player extends GameObject implements EventHandler<Event> {
     private Box shape;
 
     private int lane = 1;
+
+    private boolean jumping = false;
 
     public Player(Position position){
         super(position);
@@ -60,6 +67,9 @@ public class Player extends GameObject implements EventHandler<Event> {
                 else if((keyEvent.getCode() == KeyCode.D || keyEvent.getCode() == KeyCode.RIGHT) && keyEvent.getEventType() == KeyEvent.KEY_PRESSED){
                     moveRight();
                 }
+                else if((keyEvent.getCode() == KeyCode.W || keyEvent.getCode() == KeyCode.UP) && keyEvent.getEventType() == KeyEvent.KEY_PRESSED){
+                    jump();
+                }
             }
         }
     }
@@ -86,5 +96,34 @@ public class Player extends GameObject implements EventHandler<Event> {
         }
         lane++;
         this.setTranslateX(this.getTranslateX() + Track.LANE_WIDTH);
+    }
+
+    private void jump(){
+        if(jumping){
+            return;
+        }
+        jumping = true;
+        double oldY = this.getTranslateY();
+        Timeline timeline = new Timeline(
+                new KeyFrame(
+                        Duration.ZERO,
+                        new KeyValue(this.translateYProperty(), this.getTranslateY(), Interpolator.LINEAR)
+                ),
+                new KeyFrame(
+                        Duration.seconds(0.5),
+                        new KeyValue(this.translateYProperty(), this.getTranslateY() - 1.5*shape.getHeight(), Interpolator.LINEAR)
+                ),
+
+                new KeyFrame(
+                        Duration.seconds(1),
+                        new KeyValue(this.translateYProperty(), oldY, Interpolator.LINEAR)
+                )
+        );
+
+        timeline.setOnFinished(event -> {
+            jumping = false;
+        });
+
+        timeline.play();
     }
 }
