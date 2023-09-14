@@ -12,21 +12,25 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Box;
+import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 
 public class Player extends GameObject implements EventHandler<Event> {
-    private static final double DEFAULT_POSTION_X = 0;
+    private static final double DEFAULT_POSITION_XTION_X = 0;
     private static final double DEFAULT_POSITION_Y = 0;
     private static final double DEFAULT_POSITION_Z = 0;
 
     public static final double NEAR_CLIP = 0.1;
     public static final double FAR_CLIP = 10_000;
     public static final double FIELD_OF_VIEW = 60;
+    private static final double CAMERA_ROTATION_DIFF = 1.0;
+    private static final double CAMERA_ROTATION_BOUND = 15.0;
 
     private PerspectiveCamera camera;
     private Box shape;
 
     private int lane = 1;
+    private double current_camera_rotate = 0;
 
     private boolean jumping = false;
 
@@ -48,13 +52,13 @@ public class Player extends GameObject implements EventHandler<Event> {
     }
 
     public static Player InstantiatePlayer(){
-        return new Player(new Position(DEFAULT_POSTION_X, DEFAULT_POSITION_Y, DEFAULT_POSITION_Z));
+        return new Player(new Position(DEFAULT_POSITION_XTION_X, DEFAULT_POSITION_Y, DEFAULT_POSITION_Z));
     }
 
     @Override
-    public void handle(Event evnet){
-        if(evnet instanceof KeyEvent){
-            KeyEvent keyEvent = (KeyEvent) evnet;
+    public void handle(Event event){
+        if(event instanceof KeyEvent){
+            KeyEvent keyEvent = (KeyEvent) event;
             if(keyEvent.getCode() == KeyCode.ESCAPE && keyEvent.getEventType() == KeyEvent.KEY_PRESSED){
                 System.exit(0);
             } else {
@@ -72,6 +76,12 @@ public class Player extends GameObject implements EventHandler<Event> {
                 }
                 else if(keyEvent.getCode() == KeyCode.L && keyEvent.getEventType() == KeyEvent.KEY_PRESSED){
                     HelloApplication.toggleLight();
+                }
+                else if(keyEvent.getCode() == KeyCode.R && keyEvent.getEventType() == KeyEvent.KEY_PRESSED){
+                    rotateCamera(-CAMERA_ROTATION_DIFF);
+                }
+                else if(keyEvent.getCode() == KeyCode.T && keyEvent.getEventType() == KeyEvent.KEY_PRESSED){
+                    rotateCamera(CAMERA_ROTATION_DIFF);
                 }
             }
         }
@@ -128,5 +138,13 @@ public class Player extends GameObject implements EventHandler<Event> {
         });
 
         timeline.play();
+    }
+
+    private void rotateCamera(double d){
+        current_camera_rotate += d;
+        if(current_camera_rotate >= 15 || current_camera_rotate <= -15){
+            return;
+        }
+        camera.getTransforms().addAll(new Rotate(d, Rotate.X_AXIS));
     }
 }
