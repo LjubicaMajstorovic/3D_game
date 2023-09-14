@@ -1,6 +1,8 @@
 package com.example.demo1;
 
 import javafx.scene.Group;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -16,12 +18,14 @@ public class Track extends Group {
     public static final double DEFAULT_DISTANCE_BETWEEN_LANES = 2.0;
 
     private static final Color DEFAULT_TRACK_COLOR = Color.CORAL;
+    private static final Image imageTrack = new Image("C:\\Users\\core I7\\Desktop\\3D_domaci\\3D_game\\demo1\\images\\tartan.jpg");
     private static final PhongMaterial TRACK_MATERIAL = new PhongMaterial(DEFAULT_TRACK_COLOR);
 
     private static final Color DEFAULT_LINE_COLOR = Color.WHITE;
     private static final PhongMaterial LINE_MATERIAL = new PhongMaterial(DEFAULT_LINE_COLOR);
 
     static final Color DEFAULT_GRASS_COLOR = Color.GREEN;
+    private static final Image imageGrass = new Image("C:\\Users\\core I7\\Desktop\\3D_domaci\\3D_game\\demo1\\images\\grass.jpg");
     private static final PhongMaterial GRASS_MATERIAL = new PhongMaterial(DEFAULT_GRASS_COLOR);
 
     private Box lanes[];
@@ -39,6 +43,11 @@ public class Track extends Group {
         lines.setTranslateY(DEFAULT_TRANSLATE_Y + 1);
 
         Box grass = new Box(LANE_WIDTH * 8, LANE_HEIGHT, LANE_LENGTH);
+
+
+        GRASS_MATERIAL.setDiffuseColor(DEFAULT_GRASS_COLOR);
+        GRASS_MATERIAL.setDiffuseMap(imageGrass);
+
         grass.setMaterial(GRASS_MATERIAL);
         grass.setTranslateX(lanes[1].getTranslateX());
         grass.setTranslateY(DEFAULT_TRANSLATE_Y + 2);
@@ -50,6 +59,11 @@ public class Track extends Group {
 
     public Box CreateLane(int i){
         Box lane = new Box(LANE_WIDTH, LANE_HEIGHT, LANE_LENGTH);
+        /*ImageView imageView2 = new ImageView(imageTrack);
+        imageView2.setSmooth(true);
+        imageView2.setCache(false);*/
+        TRACK_MATERIAL.setDiffuseColor(DEFAULT_TRACK_COLOR);
+        TRACK_MATERIAL.setDiffuseMap(imageTrack);
         lane.setMaterial(TRACK_MATERIAL);
         lane.setTranslateY(DEFAULT_TRANSLATE_Y);
         lane.setTranslateX((-1 + i) * (LANE_WIDTH + DEFAULT_DISTANCE_BETWEEN_LANES));

@@ -2,6 +2,7 @@ package com.example.demo1;
 
 import javafx.scene.Group;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -35,6 +36,7 @@ public class Hurdle extends ObstacleBody{
         box2.getTransforms().addAll(new Translate(0,  -6.9*DEFAULT_OBSTACLE_DIMENSION_Y/3));
         box3.getTransforms().addAll(new Translate(DEFAULT_OBSTACLE_DIMENSION_X/2 - DEFAULT_OBSTACLE_DIMENSION_Y/2, 0));
 
+        STRIPED_MATERIAL.setDiffuseColor(Color.WHITE);
         STRIPED_MATERIAL.setDiffuseMap(textureImage);
 
         box1.setMaterial(OBSTACLE_MATERIAL);
