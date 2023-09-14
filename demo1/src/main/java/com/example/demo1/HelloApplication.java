@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
@@ -23,6 +24,7 @@ public class HelloApplication extends Application {
     private Group objects;
     private Player player;
     private Track track;
+    private static PointLight pointLight;
 
 
     private int obstacleCount = 0;
@@ -34,6 +36,7 @@ public class HelloApplication extends Application {
 
 
     public static boolean isGameActive = true;
+    private static boolean isLightOn = false;
 
 
     private final UpdateTimer timer = new UpdateTimer();
@@ -50,11 +53,11 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         stage = primaryStage;
-        setupSecne();
+        setupScene();
         showStage();
     }
 
-    private void setupSecne(){
+    private void setupScene(){
         scene = new Scene(objects = new Group(), WINDOW_WIDTH, WINDOW_HEIGHT, true, SceneAntialiasing.BALANCED);
         scene.setFill(DEFAULT_BACKGROUND_COLOR);
         scene.setCursor(Cursor.NONE);
@@ -72,7 +75,11 @@ public class HelloApplication extends Application {
         ambientLight.setTranslateZ(-1000);
         ambientLight.setBlendMode(BlendMode.SOFT_LIGHT);
 
-        objects.getChildren().addAll(player, track, ambientLight);
+        pointLight = new PointLight();
+        pointLight.setColor(Color.TRANSPARENT);
+        pointLight.getTransforms().addAll(new Translate(-250,-100, -100));
+
+        objects.getChildren().addAll(player, track, ambientLight, pointLight);
     }
 
     private void showStage(){
@@ -111,6 +118,15 @@ public class HelloApplication extends Application {
             obstacleCount++;
         }
 
+    }
+
+    public static void toggleLight(){
+        if(isLightOn){
+            pointLight.setColor(Color.TRANSPARENT);
+        } else {
+            pointLight.setColor(Color.WHITE);
+        }
+        isLightOn = !isLightOn;
     }
     public static void main(String[] args) {
         launch();

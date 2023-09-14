@@ -70,6 +70,9 @@ public class Player extends GameObject implements EventHandler<Event> {
                 else if((keyEvent.getCode() == KeyCode.W || keyEvent.getCode() == KeyCode.UP) && keyEvent.getEventType() == KeyEvent.KEY_PRESSED){
                     jump();
                 }
+                else if(keyEvent.getCode() == KeyCode.L && keyEvent.getEventType() == KeyEvent.KEY_PRESSED){
+                    HelloApplication.toggleLight();
+                }
             }
         }
     }
