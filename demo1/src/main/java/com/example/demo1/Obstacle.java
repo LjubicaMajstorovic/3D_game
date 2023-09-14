@@ -8,7 +8,7 @@ public class Obstacle extends GameObject{
     public Obstacle(Position position){
         super(position);
 
-        obstacleBody = new DefaultObstacle(position);
+        obstacleBody = new Hurdle(position);
 
         this.setTranslateX(position.getX());
         this.setTranslateY(position.getY() - obstacleBody.getObstacleHeight() / 2);
