@@ -132,6 +132,12 @@ public class HelloApplication extends Application {
                 Token diamond = (Token) child;
                 diamond.move();
                 diamond.rotate(now);
+                if(child.getBoundsInParent().intersects((player.localToScene(player.getParentBounds())))){
+                    if(diamond.getTokenBody() instanceof GreenDiamondBody){
+                        pointCounter.greenDiamondEffect();
+                        objects.getChildren().remove(child);
+                    }
+                }
             }
             if(child instanceof Obstacle){
                 Obstacle obstacle = (Obstacle) child;

@@ -55,4 +55,8 @@ public class Token extends GameObject{
         this.rotate.setAngle(odlAngle +  ROTATION_SPEED);
     }
 
+    public TokenBody getTokenBody(){
+        return tokenBody;
+    }
+
 }
