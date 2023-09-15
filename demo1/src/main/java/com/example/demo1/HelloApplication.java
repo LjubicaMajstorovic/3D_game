@@ -2,14 +2,15 @@ package com.example.demo1;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
+import javafx.scene.control.Label;
 
 public class HelloApplication extends Application {
 
@@ -20,12 +21,15 @@ public class HelloApplication extends Application {
     private static final double OBSTACLE_SPAWN_DEPTH = 1200.0;
     private static final long DEFAULT_OBSTACLE_CREATION_SPEED = 1500000000l;
     private Stage stage;
-    private Scene scene;
+    private SubScene scene3D;
+    private Scene mainScene;
     private Group objects;
     private Player player;
     private Track track;
+    private Timer clock;
+    private Points pointCounter;
     private static PointLight pointLight;
-
+    private Group root;
 
     private int obstacleCount = 0;
     private long lastObstacleCreatedTime = 0;
@@ -58,15 +62,17 @@ public class HelloApplication extends Application {
     }
 
     private void setupScene(){
-        scene = new Scene(objects = new Group(), WINDOW_WIDTH, WINDOW_HEIGHT, true, SceneAntialiasing.BALANCED);
-        scene.setFill(DEFAULT_BACKGROUND_COLOR);
-        scene.setCursor(Cursor.NONE);
+        mainScene = new Scene(root = new Group(), WINDOW_WIDTH, WINDOW_HEIGHT, false);
+        scene3D = new SubScene( objects = new Group(), WINDOW_WIDTH, WINDOW_HEIGHT, true, SceneAntialiasing.BALANCED);
+        root.getChildren().addAll(scene3D);
+        scene3D.setFill(DEFAULT_BACKGROUND_COLOR);
+        scene3D.setCursor(Cursor.NONE);
         player = Player.InstantiatePlayer();
-        scene.setCamera(player.getCamera());
+        scene3D.setCamera(player.getCamera());
 
-        scene.setOnMouseMoved(player);
-        scene.setOnKeyPressed(player);
-        scene.setOnKeyReleased(player);
+        mainScene.setOnMouseMoved(player);
+        mainScene.setOnKeyPressed(player);
+        mainScene.setOnKeyReleased(player);
 
         track = new Track();
 
@@ -79,12 +85,35 @@ public class HelloApplication extends Application {
         pointLight.setColor(Color.TRANSPARENT);
         pointLight.getTransforms().addAll(new Translate(-250,-100, -100));
 
+
         objects.getChildren().addAll(player, track, ambientLight, pointLight);
+
+
+        Label labelTimer = new Label("00:00");
+        labelTimer.setStyle("-fx-text-fill: black; -fx-font-size: 20px; -fx-font-weight: bold;");
+        labelTimer.getTransforms().addAll(new Translate(WINDOW_WIDTH*0.9, 5));
+
+
+        clock = new Timer(labelTimer);
+        clock.start();
+
+
+        Label labelPoints = new Label("Score: 0");
+        labelPoints.setStyle("-fx-text-fill: black; -fx-font-size: 20px; -fx-font-weight: bold;");
+        labelPoints.getTransforms().addAll(new Translate(10, 5));
+
+
+        pointCounter = new Points(labelPoints);
+        pointCounter.start();
+
+        root.getChildren().addAll(labelPoints, labelTimer);
+
+       
     }
 
     private void showStage(){
         stage.setTitle("Trka sa preprekama");
-        stage.setScene(scene);
+        stage.setScene(mainScene);
         stage.setResizable(false);
         stage.sizeToScene();
         stage.show();
@@ -100,6 +129,7 @@ public class HelloApplication extends Application {
             if(child instanceof Obstacle){
                 if(child.getBoundsInParent().intersects((player.localToScene(player.getParentBounds())))){
                     isGameActive = false;
+                    clock.stopTimer();
                     return;
                 }
 
