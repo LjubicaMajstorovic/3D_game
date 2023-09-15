@@ -33,6 +33,7 @@ public class Player extends GameObject implements EventHandler<Event> {
     private double current_camera_rotate = 0;
 
     private boolean jumping = false;
+    private int lives = 3;
 
     public Player(Position position){
         super(position);
@@ -142,9 +143,17 @@ public class Player extends GameObject implements EventHandler<Event> {
 
     private void rotateCamera(double d){
         current_camera_rotate += d;
-        if(current_camera_rotate >= 15 || current_camera_rotate <= -15){
+        if(current_camera_rotate >= CAMERA_ROTATION_BOUND || current_camera_rotate <= -CAMERA_ROTATION_BOUND){
             return;
         }
         camera.getTransforms().addAll(new Rotate(d, Rotate.X_AXIS));
+    }
+
+    public int getLives(){
+        return lives;
+    }
+
+    public void decrementLives(){
+        lives -=1;
     }
 }

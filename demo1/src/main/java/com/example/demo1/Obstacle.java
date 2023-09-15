@@ -4,6 +4,7 @@ public class Obstacle extends GameObject{
 
     private static final double OBSTACLE_SPEED = 4.0;
     private ObstacleBody obstacleBody;
+    private boolean isHit = false;
 
     public Obstacle(Position position){
         super(position);
@@ -28,6 +29,10 @@ public class Obstacle extends GameObject{
     {
         return this.getTranslateZ() > 0;
     }
+
+    public boolean isHit() { return this.isHit; }
+
+    public void hit() { this.isHit = true; }
 
 
 }

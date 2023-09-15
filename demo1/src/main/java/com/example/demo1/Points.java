@@ -19,7 +19,7 @@ public class Points extends AnimationTimer {
         label.setText("Score: " + elapsed);
     }
 
-    public void gameOver(){
+    public void stopCounter(){
         stop = true;
     }
 }

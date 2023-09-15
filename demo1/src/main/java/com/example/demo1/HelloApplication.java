@@ -66,7 +66,7 @@ public class HelloApplication extends Application {
         scene3D = new SubScene( objects = new Group(), WINDOW_WIDTH, WINDOW_HEIGHT, true, SceneAntialiasing.BALANCED);
         root.getChildren().addAll(scene3D);
         scene3D.setFill(DEFAULT_BACKGROUND_COLOR);
-        scene3D.setCursor(Cursor.NONE);
+        mainScene.setCursor(Cursor.NONE);
         player = Player.InstantiatePlayer();
         scene3D.setCamera(player.getCamera());
 
@@ -108,7 +108,7 @@ public class HelloApplication extends Application {
 
         root.getChildren().addAll(labelPoints, labelTimer);
 
-       
+
     }
 
     private void showStage(){
@@ -122,15 +122,24 @@ public class HelloApplication extends Application {
     }
 
     private void updateObstacles(long now){
+
+        if(!isGameActive) return;
         List<Node> children = objects.getChildren();
 
         for(int i = 0; i < objects.getChildren().size(); i++){
             Node child = children.get(i);
             if(child instanceof Obstacle){
-                if(child.getBoundsInParent().intersects((player.localToScene(player.getParentBounds())))){
-                    isGameActive = false;
-                    clock.stopTimer();
-                    return;
+                Obstacle obstacle = (Obstacle) child;
+                if(child.getBoundsInParent().intersects((player.localToScene(player.getParentBounds()))) && !obstacle.isHit()){
+                    obstacle.hit();
+                    player.decrementLives();
+                    if(player.getLives() == 0){
+                        isGameActive = false;
+                        clock.stopTimer();
+                        pointCounter.stopCounter();
+                        return;
+                    }
+
                 }
 
                 if (obstacleCount > 0 && !((Obstacle)child).move())
