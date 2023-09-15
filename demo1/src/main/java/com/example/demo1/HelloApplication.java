@@ -128,12 +128,18 @@ public class HelloApplication extends Application {
 
         for(int i = 0; i < objects.getChildren().size(); i++){
             Node child = children.get(i);
+            if(child instanceof Token){
+                Token diamond = (Token) child;
+                diamond.move();
+                diamond.rotate(now);
+            }
             if(child instanceof Obstacle){
                 Obstacle obstacle = (Obstacle) child;
                 if(child.getBoundsInParent().intersects((player.localToScene(player.getParentBounds()))) && !obstacle.isHit()){
                     obstacle.hit();
                     player.decrementLives();
                     if(player.getLives() == 0){
+                        pointLight.setColor(Color.RED);
                         isGameActive = false;
                         clock.stopTimer();
                         pointCounter.stopCounter();
@@ -155,6 +161,8 @@ public class HelloApplication extends Application {
             lastObstacleCreatedTime = now;
             objects.getChildren().add(new Obstacle(new Position(track.getRandomX(), track.getY(), OBSTACLE_SPAWN_DEPTH)));
             obstacleCount++;
+            Position position = new Position(track.getRandomX(), track.getY(), OBSTACLE_SPAWN_DEPTH);
+            objects.getChildren().add(new Token( position, new GreenDiamondBody(position)));
         }
 
     }
