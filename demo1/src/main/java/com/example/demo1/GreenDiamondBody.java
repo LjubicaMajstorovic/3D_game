@@ -7,6 +7,7 @@ import javafx.scene.transform.Translate;
 import javafx.scene.*;
 public class GreenDiamondBody extends TokenBody{
 
+
     GreenDiamondBody(Position position){
         super(position);
 
