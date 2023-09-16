@@ -1,6 +1,7 @@
 package com.example.demo1;
 
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Translate;
@@ -9,6 +10,10 @@ public class LivesDisplay extends Group {
     private Group health1;
     private Group health2;
     private Group health3;
+
+    private int lives = 1;
+
+    private static int MAX_LIVES = 3;
 
     public LivesDisplay(){
         health1 = new Group();
@@ -41,6 +46,54 @@ public class LivesDisplay extends Group {
         health3.getTransforms().addAll(new Translate(30, 0));
 
         super.getChildren().addAll(health1, health2, health3);
+    }
+
+    public void collectedLife(){
+        if(lives == MAX_LIVES){
+            return;
+        }
+        lives++;
+        if(lives == 2){
+            for(Node child : health2.getChildren()){
+                if(child instanceof Line){
+                    Line line = (Line) child;
+                    line.setStroke(Color.GREEN);
+                }
+            }
+        } else {
+            for(Node child : health3.getChildren()){
+                if(child instanceof Line){
+                    Line line = (Line) child;
+                    line.setStroke(Color.GREEN);
+                }
+            }
+        }
+    }
+
+    public void takeLife(){
+        lives--;
+        if(lives == 2){
+            for(Node child : health3.getChildren()){
+                if(child instanceof Line){
+                    Line line = (Line) child;
+                    line.setStroke(Color.RED);
+                }
+            }
+        } else if (lives == 1) {
+            for(Node child : health2.getChildren()){
+                if(child instanceof Line){
+                    Line line = (Line) child;
+                    line.setStroke(Color.RED);
+                }
+            }
+        } else {
+            for(Node child : health1.getChildren()){
+                if(child instanceof Line){
+                    Line line = (Line) child;
+                    line.setStroke(Color.RED);
+                }
+            }
+        }
     }
 
 

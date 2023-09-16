@@ -29,6 +29,7 @@ public class HelloApplication extends Application {
     private Timer clock;
     private Points pointCounter;
     private static PointLight pointLight;
+    private LivesDisplay livesDisplay;
     private Group root;
 
     private int obstacleCount = 0;
@@ -103,7 +104,7 @@ public class HelloApplication extends Application {
         labelPoints.setStyle("-fx-text-fill: black; -fx-font-size: 20px; -fx-font-weight: bold;");
         labelPoints.getTransforms().addAll(new Translate(10, 5));
 
-        LivesDisplay livesDisplay = new LivesDisplay();
+        livesDisplay = new LivesDisplay();
 
         livesDisplay.getTransforms().addAll(new Translate(20, 35));
 
@@ -137,6 +138,7 @@ public class HelloApplication extends Application {
                 if(child.getBoundsInParent().intersects((player.localToScene(player.getParentBounds())))){
                     if(token.getTokenBody() instanceof HealthBody){
                        player.incrementLives();
+                       livesDisplay.collectedLife();
                     }
                     else if(token.getTokenBody() instanceof GreenDiamondBody){
                         pointCounter.greenDiamondEffect();
@@ -159,6 +161,7 @@ public class HelloApplication extends Application {
                 if(child.getBoundsInParent().intersects((player.localToScene(player.getParentBounds()))) && !obstacle.isHit()){
                     obstacle.hit();
                     player.decrementLives();
+                    livesDisplay.takeLife();
                     if(player.getLives() == 0){
                         pointLight.setColor(Color.RED);
                         isGameActive = false;
