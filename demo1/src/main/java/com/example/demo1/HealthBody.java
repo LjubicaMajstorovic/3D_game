@@ -35,7 +35,7 @@ public class HealthBody extends TokenBody{
         horizontal.setMaterial(phongMaterial);
 
 
-        PointLight pointLight = new PointLight(Color.WHITE);
+        PointLight pointLight = new PointLight(Color.RED);
 
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.seconds(0.5), event->{

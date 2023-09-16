@@ -50,7 +50,7 @@ public class Token extends GameObject{
         return this.getTranslateZ() > 0;
     }
 
-    public void rotate(double ds){
+    public void rotate(){
         double odlAngle = this.rotate.getAngle();
         this.rotate.setAngle(odlAngle +  ROTATION_SPEED);
     }

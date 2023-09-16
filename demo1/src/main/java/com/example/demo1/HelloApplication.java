@@ -5,12 +5,12 @@ import javafx.application.Application;
 import javafx.scene.*;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
 import javafx.scene.control.Label;
+import java.util.Random;
 
 public class HelloApplication extends Application {
 
@@ -35,7 +35,7 @@ public class HelloApplication extends Application {
     private long lastObstacleCreatedTime = 0;
     private int targetObstacleCount = DEFAULT_OBSTACLE_TARGET_COUNT;
     private long obstacleCreationSpeed = DEFAULT_OBSTACLE_CREATION_SPEED;
-    private int healthCount = 0;
+    private int tokenCount = 0;
 
 
 
@@ -130,17 +130,28 @@ public class HelloApplication extends Application {
         for(int i = 0; i < objects.getChildren().size(); i++){
             Node child = children.get(i);
             if(child instanceof Token){
-                Token diamond = (Token) child;
-                diamond.move();
-                diamond.rotate(now);
+                Token token = (Token) child;
                 if(child.getBoundsInParent().intersects((player.localToScene(player.getParentBounds())))){
-                    if(diamond.getTokenBody() instanceof HealthBody){
+                    if(token.getTokenBody() instanceof HealthBody){
                        player.incrementLives();
-                        objects.getChildren().remove(child);
                     }
+                    else if(token.getTokenBody() instanceof GreenDiamondBody){
+                        pointCounter.greenDiamondEffect();
+                    } else if(token.getTokenBody() instanceof YellowDiamondBody){
+                        pointCounter.yellowDiamondEffectStart();
+                    }
+                    objects.getChildren().remove(child);
+                }
+
+                if (tokenCount > 0 && !((Token)child).move())
+                {
+                    tokenCount--;
+                    objects.getChildren().remove(child);
+                } else{
+                    token.rotate();
                 }
             }
-            if(child instanceof Obstacle){
+            else if(child instanceof Obstacle){
                 Obstacle obstacle = (Obstacle) child;
                 if(child.getBoundsInParent().intersects((player.localToScene(player.getParentBounds()))) && !obstacle.isHit()){
                     obstacle.hit();
@@ -166,10 +177,24 @@ public class HelloApplication extends Application {
         if (obstacleCount < targetObstacleCount && now > lastObstacleCreatedTime + obstacleCreationSpeed)
         {
             lastObstacleCreatedTime = now;
-            objects.getChildren().add(new Obstacle(new Position(track.getRandomX(), track.getY(), OBSTACLE_SPAWN_DEPTH)));
+            Position positionObstacle = new Position(track.getRandomX(), track.getY(), OBSTACLE_SPAWN_DEPTH);
+            objects.getChildren().add(new Obstacle(positionObstacle));
             obstacleCount++;
-            Position position = new Position(track.getRandomX(), track.getY(), OBSTACLE_SPAWN_DEPTH);
-            objects.getChildren().add(new Token( position, new HealthBody(position)));
+            Position positionToken = new Position(track.getRandomX(), track.getY(), OBSTACLE_SPAWN_DEPTH);
+            while(positionToken.getX() == positionObstacle.getX()){
+                positionToken = new Position(track.getRandomX(), track.getY(), OBSTACLE_SPAWN_DEPTH);
+            }
+            Random random = new Random();
+            tokenCount++;
+            double probability = random.nextDouble();
+            if(probability < 0.6){
+                objects.getChildren().add(new Token( positionToken, new GreenDiamondBody(positionToken)));
+            } else if(probability < 0.7){
+                objects.getChildren().add(new Token( positionToken, new YellowDiamondBody(positionToken)));
+            } else {
+                objects.getChildren().add(new Token( positionToken, new HealthBody(positionToken)));
+            }
+
         }
 
     }
