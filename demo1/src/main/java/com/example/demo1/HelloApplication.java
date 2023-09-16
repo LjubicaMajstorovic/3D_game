@@ -103,11 +103,14 @@ public class HelloApplication extends Application {
         labelPoints.setStyle("-fx-text-fill: black; -fx-font-size: 20px; -fx-font-weight: bold;");
         labelPoints.getTransforms().addAll(new Translate(10, 5));
 
+        LivesDisplay livesDisplay = new LivesDisplay();
+
+        livesDisplay.getTransforms().addAll(new Translate(20, 35));
 
         pointCounter = new Points(labelPoints);
         pointCounter.start();
 
-        root.getChildren().addAll(labelPoints, labelTimer);
+        root.getChildren().addAll(labelPoints, labelTimer, livesDisplay);
 
 
     }

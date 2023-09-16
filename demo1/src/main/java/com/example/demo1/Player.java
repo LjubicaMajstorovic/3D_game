@@ -34,7 +34,7 @@ public class Player extends GameObject implements EventHandler<Event> {
     private double current_camera_rotate = 0;
 
     private boolean jumping = false;
-    private int lives = 3;
+    private int lives = 1;
 
     public Player(Position position){
         super(position);
