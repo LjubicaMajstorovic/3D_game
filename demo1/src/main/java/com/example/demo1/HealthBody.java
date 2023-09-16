@@ -1,10 +1,16 @@
 package com.example.demo1;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.scene.PointLight;
+import javafx.scene.effect.Lighting;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
+import javafx.util.Duration;
 
 public class HealthBody extends TokenBody{
 
@@ -27,6 +33,21 @@ public class HealthBody extends TokenBody{
         PhongMaterial phongMaterial = new PhongMaterial(Color.RED);
         vertical.setMaterial(phongMaterial);
         horizontal.setMaterial(phongMaterial);
+
+
+        PointLight pointLight = new PointLight(Color.WHITE);
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.seconds(0.5), event->{
+                    super.getChildren().addAll(pointLight);
+                }),
+                new KeyFrame(Duration.seconds(1), event->{
+                    super.getChildren().remove(pointLight);
+                })
+        );
+
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
 
 
         super.getChildren().addAll(horizontal, vertical);

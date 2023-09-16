@@ -35,6 +35,7 @@ public class HelloApplication extends Application {
     private long lastObstacleCreatedTime = 0;
     private int targetObstacleCount = DEFAULT_OBSTACLE_TARGET_COUNT;
     private long obstacleCreationSpeed = DEFAULT_OBSTACLE_CREATION_SPEED;
+    private int healthCount = 0;
 
 
 
@@ -168,6 +169,7 @@ public class HelloApplication extends Application {
             objects.getChildren().add(new Obstacle(new Position(track.getRandomX(), track.getY(), OBSTACLE_SPAWN_DEPTH)));
             obstacleCount++;
             Position position = new Position(track.getRandomX(), track.getY(), OBSTACLE_SPAWN_DEPTH);
+            
             objects.getChildren().add(new Token( position, new HealthBody(position)));
         }
 
