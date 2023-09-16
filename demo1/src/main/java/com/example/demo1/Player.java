@@ -38,6 +38,8 @@ public class Player extends GameObject implements EventHandler<Event> {
     private int jumps = 0;
     private double y;
 
+    private Timeline timeline;
+
     public Player(Position position){
         super(position);
 
@@ -89,6 +91,9 @@ public class Player extends GameObject implements EventHandler<Event> {
                 else if(keyEvent.getCode() == KeyCode.T && keyEvent.getEventType() == KeyEvent.KEY_PRESSED){
                     rotateCamera(CAMERA_ROTATION_DIFF);
                 }
+                else if((keyEvent.getCode() == KeyCode.S || keyEvent.getCode() == KeyCode.DOWN) && keyEvent.getEventType() == KeyEvent.KEY_PRESSED){
+                    forceLand();
+                }
             }
         }
     }
@@ -123,7 +128,7 @@ public class Player extends GameObject implements EventHandler<Event> {
         }
         jumps++;
         if(jumps == 1) jumping = true;
-        Timeline timeline = new Timeline(
+        timeline = new Timeline(
                 new KeyFrame(
                         Duration.ZERO,
                         new KeyValue(this.translateYProperty(), this.getTranslateY(), Interpolator.LINEAR)
@@ -164,5 +169,12 @@ public class Player extends GameObject implements EventHandler<Event> {
     public void incrementLives() {
         if(lives == MAX_LIVES) return;
         lives += 1;
+    }
+
+    private void forceLand(){
+        jumping = false;
+        jumps =  0;
+        timeline.stop();
+        this.setTranslateY(y);
     }
 }
