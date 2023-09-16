@@ -135,7 +135,7 @@ public class HelloApplication extends Application {
                 diamond.rotate(now);
                 if(child.getBoundsInParent().intersects((player.localToScene(player.getParentBounds())))){
                     if(diamond.getTokenBody() instanceof HealthBody){
-                        pointCounter.yellowDiamondEffectStart();
+                       player.incrementLives();
                         objects.getChildren().remove(child);
                     }
                 }
@@ -169,7 +169,6 @@ public class HelloApplication extends Application {
             objects.getChildren().add(new Obstacle(new Position(track.getRandomX(), track.getY(), OBSTACLE_SPAWN_DEPTH)));
             obstacleCount++;
             Position position = new Position(track.getRandomX(), track.getY(), OBSTACLE_SPAWN_DEPTH);
-            
             objects.getChildren().add(new Token( position, new HealthBody(position)));
         }
 

@@ -25,6 +25,7 @@ public class Player extends GameObject implements EventHandler<Event> {
     public static final double FIELD_OF_VIEW = 60;
     private static final double CAMERA_ROTATION_DIFF = 1.0;
     private static final double CAMERA_ROTATION_BOUND = 15.0;
+    private static final double MAX_LIVES = 3;
 
     private PerspectiveCamera camera;
     private Box shape;
@@ -155,5 +156,9 @@ public class Player extends GameObject implements EventHandler<Event> {
 
     public void decrementLives(){
         lives -=1;
+    }
+    public void incrementLives() {
+        if(lives == MAX_LIVES) return;
+        lives += 1;
     }
 }
