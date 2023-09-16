@@ -1,5 +1,7 @@
 package com.example.demo1;
 
+import java.util.Random;
+
 public class Obstacle extends GameObject{
 
     private static final double OBSTACLE_SPEED = 4.0;
@@ -8,8 +10,15 @@ public class Obstacle extends GameObject{
 
     public Obstacle(Position position){
         super(position);
+        Random random = new Random();
+        double probability = random.nextDouble();
+        if(probability < 0.5){
+            obstacleBody = new Hurdle(position);
+        } else {
+            obstacleBody = new TallHurdle(position);
+        }
 
-        obstacleBody = new Hurdle(position);
+
 
         this.setTranslateX(position.getX());
         this.setTranslateY(position.getY() - obstacleBody.getObstacleHeight() / 2);

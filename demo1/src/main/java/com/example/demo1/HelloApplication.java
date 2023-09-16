@@ -190,8 +190,9 @@ public class HelloApplication extends Application {
             while(positionToken.getX() == positionObstacle.getX()){
                 positionToken = new Position(track.getRandomX(), track.getY(), OBSTACLE_SPAWN_DEPTH);
             }
-            Random random = new Random();
+
             tokenCount++;
+            Random random = new Random();
             double probability = random.nextDouble();
             if(probability < 0.6){
                 objects.getChildren().add(new Token( positionToken, new GreenDiamondBody(positionToken)));

@@ -126,7 +126,7 @@ public class Player extends GameObject implements EventHandler<Event> {
                 ),
                 new KeyFrame(
                         Duration.seconds(0.5),
-                        new KeyValue(this.translateYProperty(), this.getTranslateY() - 1.5*shape.getHeight(), Interpolator.LINEAR)
+                        new KeyValue(this.translateYProperty(), this.getTranslateY() - 1.0*shape.getHeight(), Interpolator.LINEAR)
                 ),
 
                 new KeyFrame(
