@@ -35,6 +35,8 @@ public class Player extends GameObject implements EventHandler<Event> {
 
     private boolean jumping = false;
     private int lives = 1;
+    private int jumps = 0;
+    private double y;
 
     public Player(Position position){
         super(position);
@@ -48,6 +50,8 @@ public class Player extends GameObject implements EventHandler<Event> {
         camera.setFieldOfView(FIELD_OF_VIEW);
 
         this.setTranslateY(position.getY());
+
+        y = this.getTranslateY();
 
         this.getChildren().addAll(shape, camera);
 
@@ -117,8 +121,8 @@ public class Player extends GameObject implements EventHandler<Event> {
         if(jumping){
             return;
         }
-        jumping = true;
-        double oldY = this.getTranslateY();
+        jumps++;
+        if(jumps == 1) jumping = true;
         Timeline timeline = new Timeline(
                 new KeyFrame(
                         Duration.ZERO,
@@ -126,12 +130,12 @@ public class Player extends GameObject implements EventHandler<Event> {
                 ),
                 new KeyFrame(
                         Duration.seconds(0.5),
-                        new KeyValue(this.translateYProperty(), this.getTranslateY() - 1.0*shape.getHeight(), Interpolator.LINEAR)
+                        new KeyValue(this.translateYProperty(), this.getTranslateY() - 1.2*shape.getHeight(), Interpolator.LINEAR)
                 ),
 
                 new KeyFrame(
                         Duration.seconds(1),
-                        new KeyValue(this.translateYProperty(), oldY, Interpolator.LINEAR)
+                        new KeyValue(this.translateYProperty(), y, Interpolator.LINEAR)
                 )
         );
 
