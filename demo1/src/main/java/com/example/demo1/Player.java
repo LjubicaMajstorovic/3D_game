@@ -127,7 +127,7 @@ public class Player extends GameObject implements EventHandler<Event> {
             return;
         }
         jumps++;
-        if(jumps == 1) jumping = true;
+        if(jumps == 2) jumping = true;
         timeline = new Timeline(
                 new KeyFrame(
                         Duration.ZERO,
@@ -145,7 +145,10 @@ public class Player extends GameObject implements EventHandler<Event> {
         );
 
         timeline.setOnFinished(event -> {
-            jumping = false;
+           jumps--;
+           if(jumps == 0){
+               jumping = false;
+           }
         });
 
         timeline.play();
