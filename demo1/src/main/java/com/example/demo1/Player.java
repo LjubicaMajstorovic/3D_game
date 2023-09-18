@@ -27,7 +27,7 @@ public class Player extends GameObject implements EventHandler<Event> {
     private static final double CAMERA_ROTATION_DIFF = 1.0;
     private static final double CAMERA_ROTATION_BOUND = 15.0;
     private static final double MAX_LIVES = 3;
-    private static final double RADIUS = 30;
+    private static final double RADIUS = 64;
 
     private PerspectiveCamera camera;
     private Box shape;
@@ -48,7 +48,7 @@ public class Player extends GameObject implements EventHandler<Event> {
         shape = new Box(30.0 , 30.0, 30.0);
         shape.setVisible(false);
 
-        sphere = new Sphere(30);
+        sphere = new Sphere(RADIUS);
         sphere.setVisible(false);
 
         camera = new PerspectiveCamera(true);
@@ -97,7 +97,7 @@ public class Player extends GameObject implements EventHandler<Event> {
                     rotateCamera(CAMERA_ROTATION_DIFF);
                 }
                 else if((keyEvent.getCode() == KeyCode.S || keyEvent.getCode() == KeyCode.DOWN) && keyEvent.getEventType() == KeyEvent.KEY_PRESSED){
-                    forceLand();
+                    if(timeline != null)forceLand();
                 }
             }
         }
@@ -109,11 +109,11 @@ public class Player extends GameObject implements EventHandler<Event> {
 
     public Bounds getSphereBounds() { return sphere.getBoundsInParent(); }
 
-    public double getCenterX() { return sphere.localToParent(sphere.getTranslateX(),0).getX(); }
+    public double getCenterX() { return shape.localToParent(shape.getTranslateX(),0).getX(); }
 
-    public double getCenterY() { return sphere.localToParent(0, sphere.getTranslateY()).getY(); }
+    public double getCenterY() { return shape.localToParent(0, shape.getTranslateY()).getY(); }
 
-    public double getCenterZ() { return sphere.localToParent(0, 0, sphere.getTranslateZ()).getZ(); }
+    public double getCenterZ() { return shape.localToParent(0, 0, shape.getTranslateZ()).getZ(); }
 
     public Camera getCamera(){
         return camera;

@@ -1,11 +1,16 @@
 package com.example.demo1;
 
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.DirectionalLight;
 import javafx.scene.PointLight;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
+import javafx.util.Duration;
 
 public class Token extends GameObject{
 
@@ -14,6 +19,7 @@ public class Token extends GameObject{
 
     private static final double SPEED_INCREMENT = 0.001;
     private static final double MAX_SPEED = 20;
+    private boolean takenByMagnet = false;
 
 
     private TokenBody tokenBody;
@@ -63,6 +69,25 @@ public class Token extends GameObject{
 
     public TokenBody getTokenBody(){
         return tokenBody;
+    }
+
+    public void draggedByMagnet(double x, double y, double z){
+        if(takenByMagnet) return;
+        Timeline timeline = new Timeline(
+                new KeyFrame(
+                        javafx.util.Duration.ZERO,
+                        new KeyValue(this.translateZProperty(), this.getTranslateZ(), Interpolator.LINEAR)
+                ),
+                new KeyFrame(
+                        javafx.util.Duration.seconds(1),
+                        new KeyValue(this.translateZProperty(), z, Interpolator.LINEAR))
+
+        );
+
+        takenByMagnet = true;
+
+        timeline.play();
+
     }
 
 }

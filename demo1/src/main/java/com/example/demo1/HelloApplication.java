@@ -45,6 +45,7 @@ public class HelloApplication extends Application {
 
     public static boolean isGameActive = true;
     private static boolean isLightOn = false;
+    private boolean magnetOn = false;
 
 
     private final UpdateTimer timer = new UpdateTimer();
@@ -55,6 +56,17 @@ public class HelloApplication extends Application {
         public void handle(long now)
         {
             updateObstacles(now);
+        }
+    }
+
+    private UpdateMagnet updateMagnet = new UpdateMagnet();
+
+    private class UpdateMagnet extends AnimationTimer
+    {
+        @Override
+        public void handle(long now)
+        {
+            magnetAttraction();
         }
     }
 
@@ -113,6 +125,8 @@ public class HelloApplication extends Application {
         pointCounter = new Points(labelPoints);
         pointCounter.start();
 
+        updateMagnet.stop();
+
         root.getChildren().addAll(labelPoints, labelTimer, livesDisplay);
 
 
@@ -152,8 +166,24 @@ public class HelloApplication extends Application {
                         pointCounter.yellowDiamondEffectStart();
                     } else if(token.getTokenBody() instanceof MagnetBody){
                         clock.startMagnetCount();
+                        updateMagnet.start();
+                        magnetOn = true;
                     }
                     objects.getChildren().remove(child);
+                    tokenCount--;
+                }
+
+                if(magnetOn){
+                    if(!clock.isMagnetTimeOn()){
+                        magnetOn = false;
+                        updateMagnet.stop();
+
+                    }
+                    /*if((token.getTokenBody() instanceof GreenDiamondBody || token.getTokenBody() instanceof YellowDiamondBody)
+                    && child.getBoundsInParent().intersects((player.localToScene(player.getSphereBounds())))){
+                        token.draggedByMagnet(player.getCenterX(), player.getCenterY(), player.getCenterZ());
+                    }*/
+
                 }
 
                 if (tokenCount > 0 && !((Token)child).move())
@@ -214,6 +244,30 @@ public class HelloApplication extends Application {
 
         }
 
+    }
+
+    private void magnetAttraction(){
+        for(int i = 0; i < objects.getChildren().size(); i++){
+            Node child = objects.getChildren().get(i);
+            if(child instanceof Token){
+                Token token = (Token) child;
+                if((token.getTokenBody() instanceof GreenDiamondBody || token.getTokenBody() instanceof YellowDiamondBody) && child.intersects(player.getSphereBounds())){
+                    double magnetX =player.localToParent(player.getTranslateX(), 0).getX()/2;
+                    double particleX = child.getTranslateX();
+                    double deltaX = magnetX - particleX;
+                    System.out.println(deltaX);
+                    // No change in Y-coordinate
+
+
+                    // Adjust the speed of attraction by changing the following factor
+                    double attractionFactor = 0.5;
+
+                    // Update the x-coordinate to move particles closer to the magnet
+                    child.setTranslateX(particleX + deltaX * attractionFactor);
+                }
+            }
+
+        }
     }
 
     public static void toggleLight(){
