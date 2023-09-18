@@ -238,8 +238,10 @@ public class HelloApplication extends Application {
                 objects.getChildren().add(new Token( positionToken, new YellowDiamondBody(positionToken)));
             } else if (probability < 0.8){
                 objects.getChildren().add(new Token( positionToken, new HealthBody(positionToken)));
-            } else {
+            } else if(probability < 0.9) {
                 objects.getChildren().add(new Token(positionToken, new MagnetBody(positionToken)));
+            } else {
+                objects.getChildren().add(new Token(positionToken, new NozzleBody(positionToken)));
             }
 
         }
@@ -255,7 +257,7 @@ public class HelloApplication extends Application {
                     double magnetX =player.localToParent(player.getTranslateX(), 0).getX()/2;
                     double particleX = child.getTranslateX();
                     double deltaX = magnetX - particleX;
-                    System.out.println(deltaX);
+                    
                     // No change in Y-coordinate
 
 
