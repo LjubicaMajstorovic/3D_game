@@ -200,12 +200,14 @@ public class HelloApplication extends Application {
             tokenCount++;
             Random random = new Random();
             double probability = random.nextDouble();
-            if(probability < 0.6){
+            if(probability < 0.5){
                 objects.getChildren().add(new Token( positionToken, new GreenDiamondBody(positionToken)));
-            } else if(probability < 0.7){
+            } else if(probability < 0.6){
                 objects.getChildren().add(new Token( positionToken, new YellowDiamondBody(positionToken)));
-            } else {
+            } else if (probability < 0.8){
                 objects.getChildren().add(new Token( positionToken, new HealthBody(positionToken)));
+            } else {
+                objects.getChildren().add(new Token(positionToken, new MagnetBody(positionToken)));
             }
 
         }
