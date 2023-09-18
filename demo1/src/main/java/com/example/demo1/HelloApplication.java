@@ -150,6 +150,8 @@ public class HelloApplication extends Application {
                         pointCounter.greenDiamondEffect();
                     } else if(token.getTokenBody() instanceof YellowDiamondBody){
                         pointCounter.yellowDiamondEffectStart();
+                    } else if(token.getTokenBody() instanceof MagnetBody){
+                        clock.startMagnetCount();
                     }
                     objects.getChildren().remove(child);
                 }

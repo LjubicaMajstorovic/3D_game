@@ -35,6 +35,6 @@ public class MagnetBody extends TokenBody{
     }
 
     public double getTokenHeight(){
-        return 1;
+        return 2*MAGNET_HEIGHT_HALF;
     }
 }

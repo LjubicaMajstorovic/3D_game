@@ -12,6 +12,7 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 
@@ -26,10 +27,11 @@ public class Player extends GameObject implements EventHandler<Event> {
     private static final double CAMERA_ROTATION_DIFF = 1.0;
     private static final double CAMERA_ROTATION_BOUND = 15.0;
     private static final double MAX_LIVES = 3;
+    private static final double RADIUS = 30;
 
     private PerspectiveCamera camera;
     private Box shape;
-
+    private Sphere sphere;
     private int lane = 1;
     private double current_camera_rotate = 0;
 
@@ -46,6 +48,9 @@ public class Player extends GameObject implements EventHandler<Event> {
         shape = new Box(30.0 , 30.0, 30.0);
         shape.setVisible(false);
 
+        sphere = new Sphere(30);
+        sphere.setVisible(false);
+
         camera = new PerspectiveCamera(true);
         camera.setNearClip(NEAR_CLIP);
         camera.setFarClip(FAR_CLIP);
@@ -55,7 +60,7 @@ public class Player extends GameObject implements EventHandler<Event> {
 
         y = this.getTranslateY();
 
-        this.getChildren().addAll(shape, camera);
+        this.getChildren().addAll(shape, camera, sphere);
 
     }
 
@@ -101,6 +106,14 @@ public class Player extends GameObject implements EventHandler<Event> {
     public Bounds getParentBounds(){
         return shape.getBoundsInParent();
     }
+
+    public Bounds getSphereBounds() { return sphere.getBoundsInParent(); }
+
+    public double getCenterX() { return sphere.localToParent(sphere.getTranslateX(),0).getX(); }
+
+    public double getCenterY() { return sphere.localToParent(0, sphere.getTranslateY()).getY(); }
+
+    public double getCenterZ() { return sphere.localToParent(0, 0, sphere.getTranslateZ()).getZ(); }
 
     public Camera getCamera(){
         return camera;

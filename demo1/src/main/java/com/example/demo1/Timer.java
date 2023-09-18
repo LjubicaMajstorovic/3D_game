@@ -2,11 +2,16 @@ package com.example.demo1;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 
 public class Timer extends AnimationTimer{
     private Label label;
     private long startTime;
     private boolean stop = false;
+
+    private boolean magnetTime = false;
+    private long magnetTimeElapsed = 0;
+    private long magnetStartTime = 0;
 
     public Timer(Label label){
         this.label = label;
@@ -32,9 +37,27 @@ public class Timer extends AnimationTimer{
         }
 
         label.setText("" + min + ":" + sec);
+        if(magnetTime){
+            magnetTimeElapsed = (now - magnetStartTime)/1_000_000_000;
+            if(magnetTimeElapsed >= 10){
+                magnetTime = false;
+                label.setTextFill(Color.BLACK);
+            }
+        }
     }
 
     public void stopTimer(){
         stop = true;
+    }
+
+    public void startMagnetCount(){
+        magnetTime = true;
+        magnetStartTime = System.nanoTime();
+        label.setTextFill(Color.RED);
+    }
+
+
+    public boolean isMagnetTimeOn(){
+        return magnetTime;
     }
 }
