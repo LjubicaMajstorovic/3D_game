@@ -4,7 +4,9 @@ import java.util.Random;
 
 public class Obstacle extends GameObject{
 
-    private static final double OBSTACLE_SPEED = 4.0;
+    private static double OBSTACLE_SPEED = 4.0;
+    private static final double SPEED_INCREMENT = 0.001;
+    private static final double MAX_SPEED = 20;
     private ObstacleBody obstacleBody;
     private boolean isHit = false;
 
@@ -30,6 +32,9 @@ public class Obstacle extends GameObject{
 
     public boolean move()
     {
+        if(OBSTACLE_SPEED < MAX_SPEED){
+            OBSTACLE_SPEED += SPEED_INCREMENT;
+        }
         this.setTranslateZ(this.getTranslateZ() - OBSTACLE_SPEED);
         return isOnTrack();
     }

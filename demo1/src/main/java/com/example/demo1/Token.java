@@ -9,8 +9,11 @@ import javafx.scene.transform.Translate;
 
 public class Token extends GameObject{
 
-    private static final double TOKEN_SPEED = 4.0;
+    private static double TOKEN_SPEED = 4.0;
     private static final double ROTATION_SPEED = 3;
+
+    private static final double SPEED_INCREMENT = 0.001;
+    private static final double MAX_SPEED = 20;
 
 
     private TokenBody tokenBody;
@@ -40,6 +43,9 @@ public class Token extends GameObject{
 
     public boolean move()
     {
+        if(TOKEN_SPEED < MAX_SPEED){
+            TOKEN_SPEED += SPEED_INCREMENT;
+        }
         this.setTranslateZ(this.getTranslateZ() - TOKEN_SPEED);
         return isOnTrack();
 

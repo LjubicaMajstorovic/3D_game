@@ -20,6 +20,8 @@ public class HelloApplication extends Application {
     private static final int DEFAULT_OBSTACLE_TARGET_COUNT = 5;
     private static final double OBSTACLE_SPAWN_DEPTH = 1200.0;
     private static final long DEFAULT_OBSTACLE_CREATION_SPEED = 1500000000l;
+    private static final double DEFAULT_OBSTACLE_CREATION_INCREMENT = 1000000;
+    private static final double MAX_SPEED_CREATION = 500000000l;
     private Stage stage;
     private SubScene scene3D;
     private Scene mainScene;
@@ -35,7 +37,7 @@ public class HelloApplication extends Application {
     private int obstacleCount = 0;
     private long lastObstacleCreatedTime = 0;
     private int targetObstacleCount = DEFAULT_OBSTACLE_TARGET_COUNT;
-    private long obstacleCreationSpeed = DEFAULT_OBSTACLE_CREATION_SPEED;
+    private double obstacleCreationSpeed = DEFAULT_OBSTACLE_CREATION_SPEED;
     private int tokenCount = 0;
 
 
@@ -130,6 +132,10 @@ public class HelloApplication extends Application {
 
         if(!isGameActive) return;
         List<Node> children = objects.getChildren();
+
+        if(obstacleCreationSpeed > MAX_SPEED_CREATION){
+            obstacleCreationSpeed -= DEFAULT_OBSTACLE_CREATION_INCREMENT;
+        }
 
         for(int i = 0; i < objects.getChildren().size(); i++){
             Node child = children.get(i);
