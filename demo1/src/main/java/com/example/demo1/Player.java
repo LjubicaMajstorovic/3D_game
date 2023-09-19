@@ -116,7 +116,7 @@ public class Player extends GameObject implements EventHandler<Event> {
                 new KeyValue(right.angleProperty(), -60)
         ),
                 new KeyFrame(
-                        Duration.seconds(0.5),
+                        Duration.seconds(1),
                         new KeyValue(left.angleProperty(), -60),
                         new KeyValue(right.angleProperty(), 0)
                 )
@@ -133,6 +133,7 @@ public class Player extends GameObject implements EventHandler<Event> {
         shape = new Group();
 
         shape.getChildren().addAll(leftArm, rightArm, body, legLeftGroup, legRightGroup, head, neck, leftHand, rightHand);
+        shape.setVisible(false);
 
 
         sphere = new Sphere(RADIUS);
@@ -144,6 +145,7 @@ public class Player extends GameObject implements EventHandler<Event> {
         defaultCamera.setFieldOfView(FIELD_OF_VIEW);
 
 
+
         alternativeCamera = new PerspectiveCamera(true);
         alternativeCamera.setNearClip(NEAR_CLIP);
         alternativeCamera.setFarClip(FAR_CLIP);
@@ -152,7 +154,7 @@ public class Player extends GameObject implements EventHandler<Event> {
         alternativeCamera.setTranslateY(-30);
         alternativeCamera.setTranslateZ(-70);
 
-        camera = alternativeCamera;
+        camera = defaultCamera;
 
         this.setTranslateY(position.getY());
 
@@ -198,10 +200,11 @@ public class Player extends GameObject implements EventHandler<Event> {
                     if(timeline != null)forceLand();
                 }
                 else if(keyEvent.getCode() == KeyCode.DIGIT2 && keyEvent.getEventType() == KeyEvent.KEY_PRESSED){
-                    System.out.println("2");
-                    camera = alternativeCamera;
+                    shape.setVisible(true);
+                    HelloApplication.setCamera(alternativeCamera);
                 } else if(keyEvent.getCode() == KeyCode.DIGIT1 && keyEvent.getEventType() == KeyEvent.KEY_PRESSED) {
-                    camera = defaultCamera;
+                    shape.setVisible(false);
+                    HelloApplication.setCamera(defaultCamera);
                 }
             }
         }

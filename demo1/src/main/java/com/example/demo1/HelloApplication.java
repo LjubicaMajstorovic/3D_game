@@ -25,7 +25,7 @@ public class HelloApplication extends Application {
     private static final double DEFAULT_OBSTACLE_CREATION_INCREMENT = 1000000;
     private static final double MAX_SPEED_CREATION = 500000000l;
     private Stage stage;
-    private SubScene scene3D;
+    private static SubScene scene3D;
     private Scene mainScene;
     private Group objects;
     private Player player;
@@ -105,7 +105,7 @@ public class HelloApplication extends Application {
 
         pointLight = new PointLight();
         pointLight.setColor(Color.TRANSPARENT);
-        pointLight.getTransforms().addAll(new Translate(-250,-100, -100));
+        pointLight.getTransforms().addAll(new Translate(-250,-100, -10000));
 
 
         objects.getChildren().addAll(player, track, ambientLight, pointLight);
@@ -361,6 +361,10 @@ public class HelloApplication extends Application {
 
     private void elevateToken(Token token){
         token.setTranslateY(-45);
+    }
+
+    public static void setCamera(Camera cameraToSet){
+        scene3D.setCamera(cameraToSet);
     }
 
 
