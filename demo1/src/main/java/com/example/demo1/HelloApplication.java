@@ -362,6 +362,8 @@ public class HelloApplication extends Application {
     private void elevateToken(Token token){
         token.setTranslateY(-45);
     }
+
+
     public static void main(String[] args) {
         launch();
     }
