@@ -61,14 +61,12 @@ public class Timer extends AnimationTimer{
     }
 
     public void startMagnetCount(){
-        if(nozzleTime) nozzleTime = false;
         magnetTime = true;
         magnetStartTime = System.nanoTime();
         label.setTextFill(Color.RED);
     }
 
     public void startNozzleCount(){
-        if(magnetTime) magnetTime = false;
         nozzleTime = true;
         nozzleStartTime = System.nanoTime();
         label.setTextFill(Color.PURPLE);

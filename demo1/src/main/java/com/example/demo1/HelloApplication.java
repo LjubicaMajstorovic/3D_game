@@ -1,6 +1,6 @@
 package com.example.demo1;
 
-import javafx.animation.AnimationTimer;
+import javafx.animation.*;
 import javafx.application.Application;
 import javafx.scene.*;
 import javafx.scene.effect.BlendMode;
@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
 import javafx.scene.control.Label;
+import javafx.util.Duration;
+
 import java.util.Random;
 
 public class HelloApplication extends Application {
@@ -39,6 +41,7 @@ public class HelloApplication extends Application {
     private int targetObstacleCount = DEFAULT_OBSTACLE_TARGET_COUNT;
     private double obstacleCreationSpeed = DEFAULT_OBSTACLE_CREATION_SPEED;
     private int tokenCount = 0;
+    private double yOriginal = 0;
 
 
 
@@ -47,6 +50,7 @@ public class HelloApplication extends Application {
     private static boolean isLightOn = false;
     private boolean magnetOn = false;
     private boolean nozzleOn = false;
+    private boolean heightSetting = false;
 
 
     private final UpdateTimer timer = new UpdateTimer();
@@ -85,6 +89,7 @@ public class HelloApplication extends Application {
         scene3D.setFill(DEFAULT_BACKGROUND_COLOR);
         mainScene.setCursor(Cursor.NONE);
         player = Player.InstantiatePlayer();
+        yOriginal = player.getY();
         scene3D.setCamera(player.getCamera());
 
         mainScene.setOnMouseMoved(player);
@@ -171,7 +176,10 @@ public class HelloApplication extends Application {
                         magnetOn = true;
                     } else if(token.getTokenBody() instanceof NozzleBody){
                         clock.startNozzleCount();
-                        nozzleOn = true;
+                        if(!nozzleOn) {
+                            nozzleOn = true;
+                            elevatePlayerAndTokens();
+                        }
                     }
                     objects.getChildren().remove(child);
                     tokenCount--;
@@ -186,6 +194,7 @@ public class HelloApplication extends Application {
                 } else if (nozzleOn){
                     if(!clock.isNozzleTimeOn()){
                         nozzleOn = false;
+                        descendPlayersAndTokens();
                     }
                 }
 
@@ -199,7 +208,7 @@ public class HelloApplication extends Application {
             }
             else if(child instanceof Obstacle){
                 Obstacle obstacle = (Obstacle) child;
-                if(child.getBoundsInParent().intersects((player.localToScene(player.getParentBounds()))) && !obstacle.isHit()){
+                if(child.getBoundsInParent().intersects((player.localToScene(player.getParentBounds()))) && !obstacle.isHit() && !heightSetting){
                     obstacle.hit();
                     player.decrementLives();
                     livesDisplay.takeLife();
@@ -235,16 +244,30 @@ public class HelloApplication extends Application {
             tokenCount++;
             Random random = new Random();
             double probability = random.nextDouble();
+            Token token;
             if(probability < 0.5){
-                objects.getChildren().add(new Token( positionToken, new GreenDiamondBody(positionToken)));
+                objects.getChildren().add(token = new Token( positionToken, new GreenDiamondBody(positionToken)));
             } else if(probability < 0.6){
-                objects.getChildren().add(new Token( positionToken, new YellowDiamondBody(positionToken)));
+                objects.getChildren().add(token = new Token( positionToken, new YellowDiamondBody(positionToken)));
             } else if (probability < 0.8){
-                objects.getChildren().add(new Token( positionToken, new HealthBody(positionToken)));
+                objects.getChildren().add(token = new Token( positionToken, new HealthBody(positionToken)));
             } else if(probability < 0.9) {
-                objects.getChildren().add(new Token(positionToken, new MagnetBody(positionToken)));
+                if(magnetOn || nozzleOn){
+                    objects.getChildren().add(token = new Token( positionToken, new GreenDiamondBody(positionToken)));
+                } else {
+                    objects.getChildren().add(token = new Token(positionToken, new MagnetBody(positionToken)));
+                }
             } else {
-                objects.getChildren().add(new Token(positionToken, new NozzleBody(positionToken)));
+                if(magnetOn || nozzleOn){
+                    objects.getChildren().add(token = new Token( positionToken, new YellowDiamondBody(positionToken)));
+                } else {
+                    objects.getChildren().add(token = new Token(positionToken, new NozzleBody(positionToken)));
+                }
+
+            }
+
+            if(nozzleOn){
+                elevateToken(token);
             }
 
         }
@@ -280,6 +303,64 @@ public class HelloApplication extends Application {
             pointLight.setColor(Color.WHITE);
         }
         isLightOn = !isLightOn;
+    }
+
+
+    private void elevatePlayerAndTokens(){
+        heightSetting = true;
+        for(int i = 0; i < objects.getChildren().size(); i++){
+            Node child = objects.getChildren().get(i);
+            if(child instanceof Token || child instanceof Player){
+                Timeline timeline = new Timeline(
+                        new KeyFrame(
+                                javafx.util.Duration.ZERO,
+                                new KeyValue(child.translateYProperty(), child.getTranslateY(), Interpolator.LINEAR)
+                        ),
+                        new KeyFrame(
+                                Duration.seconds(1),
+                                new KeyValue(child.translateYProperty(), -45, Interpolator.LINEAR)
+                        )
+                );
+
+                timeline.play();
+                if(child instanceof Player){
+                    timeline.setOnFinished(event -> {
+                        heightSetting = false;
+                    });
+                }
+            }
+
+        }
+    }
+
+    private void descendPlayersAndTokens(){
+        heightSetting = true;
+        for(int i = 0; i < objects.getChildren().size(); i++){
+            Node child = objects.getChildren().get(i);
+            if(child instanceof Token || child instanceof Player){
+                Timeline timeline = new Timeline(
+                        new KeyFrame(
+                                javafx.util.Duration.ZERO,
+                                new KeyValue(child.translateYProperty(), child.getTranslateY(), Interpolator.LINEAR)
+                        ),
+                        new KeyFrame(
+                                Duration.seconds(1),
+                                new KeyValue(child.translateYProperty(), yOriginal, Interpolator.LINEAR)
+                        )
+                );
+
+                timeline.play();
+                if(child instanceof Player){
+                    timeline.setOnFinished(event -> {
+                        heightSetting = false;
+                    });
+                }
+            }
+        }
+    }
+
+    private void elevateToken(Token token){
+        token.setTranslateY(-45);
     }
     public static void main(String[] args) {
         launch();

@@ -103,6 +103,10 @@ public class Player extends GameObject implements EventHandler<Event> {
         }
     }
 
+    public double getY(){
+        return y;
+    }
+
     public Bounds getParentBounds(){
         return shape.getBoundsInParent();
     }
