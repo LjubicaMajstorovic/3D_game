@@ -13,6 +13,10 @@ public class Timer extends AnimationTimer{
     private long magnetTimeElapsed = 0;
     private long magnetStartTime = 0;
 
+    private boolean nozzleTime = false;
+    private long nozzleTimeElapsed = 0;
+    private long nozzleStartTime = 0;
+
     public Timer(Label label){
         this.label = label;
         startTime = System.nanoTime();
@@ -43,6 +47,12 @@ public class Timer extends AnimationTimer{
                 magnetTime = false;
                 label.setTextFill(Color.BLACK);
             }
+        } else if(nozzleTime){
+            nozzleTimeElapsed = (now - nozzleStartTime)/1_000_000_000;
+            if(nozzleTimeElapsed >= 10){
+                nozzleTime = false;
+                label.setTextFill(Color.BLACK);
+            }
         }
     }
 
@@ -51,13 +61,25 @@ public class Timer extends AnimationTimer{
     }
 
     public void startMagnetCount(){
+        if(nozzleTime) nozzleTime = false;
         magnetTime = true;
         magnetStartTime = System.nanoTime();
         label.setTextFill(Color.RED);
     }
 
+    public void startNozzleCount(){
+        if(magnetTime) magnetTime = false;
+        nozzleTime = true;
+        nozzleStartTime = System.nanoTime();
+        label.setTextFill(Color.PURPLE);
+    }
+
 
     public boolean isMagnetTimeOn(){
         return magnetTime;
+    }
+
+    public boolean isNozzleTimeOn(){
+        return nozzleTime;
     }
 }

@@ -23,10 +23,7 @@ public class NozzleBody extends TokenBody{
         nozzle.setMaterial(phongMaterial1);
 
 
-
         super.getChildren().addAll(nozzle);
-
-
 
     }
 

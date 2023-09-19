@@ -46,6 +46,7 @@ public class HelloApplication extends Application {
     public static boolean isGameActive = true;
     private static boolean isLightOn = false;
     private boolean magnetOn = false;
+    private boolean nozzleOn = false;
 
 
     private final UpdateTimer timer = new UpdateTimer();
@@ -168,6 +169,9 @@ public class HelloApplication extends Application {
                         clock.startMagnetCount();
                         updateMagnet.start();
                         magnetOn = true;
+                    } else if(token.getTokenBody() instanceof NozzleBody){
+                        clock.startNozzleCount();
+                        nozzleOn = true;
                     }
                     objects.getChildren().remove(child);
                     tokenCount--;
@@ -179,11 +183,10 @@ public class HelloApplication extends Application {
                         updateMagnet.stop();
 
                     }
-                    /*if((token.getTokenBody() instanceof GreenDiamondBody || token.getTokenBody() instanceof YellowDiamondBody)
-                    && child.getBoundsInParent().intersects((player.localToScene(player.getSphereBounds())))){
-                        token.draggedByMagnet(player.getCenterX(), player.getCenterY(), player.getCenterZ());
-                    }*/
-
+                } else if (nozzleOn){
+                    if(!clock.isNozzleTimeOn()){
+                        nozzleOn = false;
+                    }
                 }
 
                 if (tokenCount > 0 && !((Token)child).move())
@@ -257,14 +260,12 @@ public class HelloApplication extends Application {
                     double magnetX =player.localToParent(player.getTranslateX(), 0).getX()/2;
                     double particleX = child.getTranslateX();
                     double deltaX = magnetX - particleX;
-                    
-                    // No change in Y-coordinate
 
 
-                    // Adjust the speed of attraction by changing the following factor
+
                     double attractionFactor = 0.5;
 
-                    // Update the x-coordinate to move particles closer to the magnet
+
                     child.setTranslateX(particleX + deltaX * attractionFactor);
                 }
             }
