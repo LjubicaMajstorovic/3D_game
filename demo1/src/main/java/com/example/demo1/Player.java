@@ -201,9 +201,11 @@ public class Player extends GameObject implements EventHandler<Event> {
                 }
                 else if(keyEvent.getCode() == KeyCode.DIGIT2 && keyEvent.getEventType() == KeyEvent.KEY_PRESSED){
                     shape.setVisible(true);
+                    camera = alternativeCamera;
                     HelloApplication.setCamera(alternativeCamera);
                 } else if(keyEvent.getCode() == KeyCode.DIGIT1 && keyEvent.getEventType() == KeyEvent.KEY_PRESSED) {
                     shape.setVisible(false);
+                    camera = defaultCamera;
                     HelloApplication.setCamera(defaultCamera);
                 }
             }
