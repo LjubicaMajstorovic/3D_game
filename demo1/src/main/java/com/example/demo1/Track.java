@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 
+import java.io.File;
 import java.util.Random;
 
 public class Track extends Group {
@@ -18,14 +19,22 @@ public class Track extends Group {
     public static final double DEFAULT_DISTANCE_BETWEEN_LANES = 2.0;
 
     private static final Color DEFAULT_TRACK_COLOR = Color.CORAL;
-    private static final Image imageTrack = new Image("C:\\Users\\core I7\\Desktop\\3D_domaci\\3D_game\\demo1\\images\\tartan.jpg");
+
+    static File file = new File("images/tartan.jpg");
+
+    // Pretvaranje File objekta u apsolutnu putanju
+    static String absolutePath = file.getAbsolutePath();
+    private final Image imageTrack = new Image(getClass().getResource("images/tartan.jpg").toString());
     private static final PhongMaterial TRACK_MATERIAL = new PhongMaterial(DEFAULT_TRACK_COLOR);
 
     private static final Color DEFAULT_LINE_COLOR = Color.WHITE;
     private static final PhongMaterial LINE_MATERIAL = new PhongMaterial(DEFAULT_LINE_COLOR);
 
     static final Color DEFAULT_GRASS_COLOR = Color.GREEN;
-    private static final Image imageGrass = new Image("C:\\Users\\core I7\\Desktop\\3D_domaci\\3D_game\\demo1\\images\\grass.jpg");
+
+    static File file1 = new File("grass.jpg");
+    static String absolutePath1 = file1.getAbsolutePath();
+    private final Image imageGrass = new Image(getClass().getResource("images/grass.jpg").toString());
     private static final PhongMaterial GRASS_MATERIAL = new PhongMaterial(DEFAULT_GRASS_COLOR);
 
     private Box lanes[];

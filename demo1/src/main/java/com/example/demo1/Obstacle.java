@@ -6,7 +6,7 @@ public class Obstacle extends GameObject{
 
     private static double OBSTACLE_SPEED = 4.0;
     private static final double SPEED_INCREMENT = 0.001;
-    private static final double MAX_SPEED = 10;
+    private static final double MAX_SPEED = 12;
     private ObstacleBody obstacleBody;
     private boolean isHit = false;
 

@@ -318,7 +318,7 @@ public class HelloApplication extends Application {
                         ),
                         new KeyFrame(
                                 Duration.seconds(1),
-                                new KeyValue(child.translateYProperty(), -45, Interpolator.LINEAR)
+                                new KeyValue(child.translateYProperty(), -55, Interpolator.LINEAR)
                         )
                 );
 
@@ -360,7 +360,7 @@ public class HelloApplication extends Application {
     }
 
     private void elevateToken(Token token){
-        token.setTranslateY(-45);
+        token.setTranslateY(-55);
     }
 
     public static void setCamera(Camera cameraToSet){

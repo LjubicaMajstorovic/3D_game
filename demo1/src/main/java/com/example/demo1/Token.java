@@ -18,7 +18,7 @@ public class Token extends GameObject{
     private static final double ROTATION_SPEED = 3;
 
     private static final double SPEED_INCREMENT = 0.001;
-    private static final double MAX_SPEED = 10;
+    private static final double MAX_SPEED = 12;
     private boolean takenByMagnet = false;
 
 
