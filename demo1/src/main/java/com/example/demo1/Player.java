@@ -40,6 +40,7 @@ public class Player extends GameObject implements EventHandler<Event> {
     private PerspectiveCamera camera;
     private Group shape;
     private Sphere sphere;
+    private Box box;
     private int lane = 1;
     private double current_camera_rotate = 0;
 
@@ -56,10 +57,11 @@ public class Player extends GameObject implements EventHandler<Event> {
         PhongMaterial phongMaterial = new PhongMaterial(Color.LIGHTGRAY);
         phongMaterial.setSpecularColor(Color.WHITE);
 
-        Box box = new Box(30.0 , 30.0, 30.0);
+        box = new Box(30.0 , 30.0, 30.0);
         box.getTransforms().addAll(new Translate(0, 10));
         box.setMaterial(new PhongMaterial(Color.TRANSPARENT));
         Sphere head = new Sphere(3);
+        box.setVisible(false);
         head.setMaterial(phongMaterial);
         Box body = new Box(10, 7, 10);
         body.setMaterial(phongMaterial);
@@ -134,7 +136,7 @@ public class Player extends GameObject implements EventHandler<Event> {
 
         shape = new Group();
 
-        shape.getChildren().addAll(leftArm, rightArm, body, legLeftGroup, legRightGroup, head, neck, leftHand, rightHand, box);
+        shape.getChildren().addAll(leftArm, rightArm, body, legLeftGroup, legRightGroup, head, neck, leftHand, rightHand);
         shape.setVisible(false);
 
 
@@ -162,7 +164,7 @@ public class Player extends GameObject implements EventHandler<Event> {
 
         y = this.getTranslateY();
 
-        this.getChildren().addAll(shape, camera, sphere);
+        this.getChildren().addAll(shape, camera, sphere, box);
 
     }
 
@@ -219,7 +221,7 @@ public class Player extends GameObject implements EventHandler<Event> {
     }
 
     public Bounds getParentBounds(){
-        return shape.getBoundsInParent();
+        return box.getBoundsInParent();
     }
 
     public Bounds getSphereBounds() { return sphere.getBoundsInParent(); }
