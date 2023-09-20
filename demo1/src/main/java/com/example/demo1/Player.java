@@ -56,7 +56,9 @@ public class Player extends GameObject implements EventHandler<Event> {
         PhongMaterial phongMaterial = new PhongMaterial(Color.LIGHTGRAY);
         phongMaterial.setSpecularColor(Color.WHITE);
 
-        //shape = new Box(30.0 , 30.0, 30.0);
+        Box box = new Box(30.0 , 30.0, 30.0);
+        box.getTransforms().addAll(new Translate(0, 10));
+        box.setMaterial(new PhongMaterial(Color.TRANSPARENT));
         Sphere head = new Sphere(3);
         head.setMaterial(phongMaterial);
         Box body = new Box(10, 7, 10);
@@ -127,12 +129,12 @@ public class Player extends GameObject implements EventHandler<Event> {
         walking.play();
 
 
-        //shape.setVisible(false);
+
         //shape.setMaterial(phongMaterial);
 
         shape = new Group();
 
-        shape.getChildren().addAll(leftArm, rightArm, body, legLeftGroup, legRightGroup, head, neck, leftHand, rightHand);
+        shape.getChildren().addAll(leftArm, rightArm, body, legLeftGroup, legRightGroup, head, neck, leftHand, rightHand, box);
         shape.setVisible(false);
 
 
